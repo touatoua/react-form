@@ -3,10 +3,24 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import 'bootstrap/dist/css/bootstrap.css'; // or include from a CDN
+import 'react-bootstrap-country-select/dist/react-bootstrap-country-select.css';
+import 'react-phone-input-2/lib/style.css'
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import reducer from '../src/redux/index'
+
+const store = createStore(reducer, applyMiddleware())
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store} >
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
