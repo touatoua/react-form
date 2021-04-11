@@ -7,12 +7,13 @@ import 'bootstrap/dist/css/bootstrap.css'; // or include from a CDN
 import 'react-bootstrap-country-select/dist/react-bootstrap-country-select.css';
 import 'react-phone-input-2/lib/style.css'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import reducer from '../src/redux/index'
-
-const store = createStore(reducer, applyMiddleware())
+import thunk from 'redux-thunk'
+const store = createStore(reducer, applyMiddleware(thunk))
 
 
 

@@ -1,14 +1,16 @@
+import { ADD_FORM } from '../actions/form'
+
 const initialState = {
-    form: [
-        { id: '2312', name: 'asdasd', price: 'asdasd' }
-    ]
+    form: localStorage.getItem('form') ? JSON.parse(localStorage.getItem('form')) : []
 }
 
 export default (state = initialState, { type, payload }) => {
     switch (type) {
 
-        case 'typeName':
-            return { ...state, ...payload }
+        case ADD_FORM:
+            state.form.push(payload)
+            localStorage.setItem('form', JSON.stringify(state.form))
+            return { ...state }
 
         default:
             return state
