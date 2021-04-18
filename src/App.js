@@ -9,9 +9,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import countryList from "react-select-country-list";
 import * as formAction from '../src/redux/actions/form'
 
-const pagination = paginationFactory({
-  hideSizePerPage: true,
-});
 
 
 function App() {
@@ -21,7 +18,9 @@ function App() {
   const [validated, setvalidated] = useState(false)
   const [dataForm, setdataForm] = useState(formReducer.form)
   const [objForm, setobjForm] = useState({ gender: 'Male', nationality: 'Thailand' })
-  const [checkAll, setcheckAll] = useState(false)
+  // const [checkAll, setcheckAll] = useState(false)
+  const [selectArray, setselectArray] = useState(new Array)
+  const [currentPage, setcurrentPage] = useState(0)
 
   const onChangeInput = ({ target: { name, value } }) => {
     console.log('name ', name)
@@ -44,19 +43,71 @@ function App() {
 
   }
 
+  // const onChangeCheckbox = (row, rowIndex) => {
+  //   // console.log('row', row)
+  //   // dataForm[rowIndex] = { ...dataForm[rowIndex], check: !row.check }
+  //   // console.log('dataForm[rowIndex] ', dataForm[rowIndex])
+  //   // setdataForm([...dataForm])
 
+  // }
 
-  const selectRow  = {
+  const deleteRows = (rowIndex) => {
+    dataForm.splice(((currentPage - 1) * 5) + rowIndex, 1)
+    dispatch(formAction.onDelete(dataForm))
+  }
+
+  const onDeleteSelect = () => {
+    let filtered = dataForm.filter(function (value, index, arr) {
+      return selectArray.indexOf(index) === -1
+    });
+    setdataForm(filtered)
+    dispatch(formAction.onDelete(filtered))
+
+    setselectArray(new Array)
+
+  }
+
+  const pagination = paginationFactory({
+    hideSizePerPage: true,
+    sizePerPage: 5,
+    onPageChange: (page) => {
+      setcurrentPage(page)
+    }
+  });
+
+  const selectRow = {
     mode: 'checkbox',
-      // onSelect: (row, isSelect, rowIndex, e) => {
-    //   console.log('rowIndex ', rowIndex)
-    //   return 
-    // },
-    
+    onSelect: (row, isSelect, rowIndex, e) => {
+
+      switch (isSelect) {
+        case true:
+          selectArray.push(rowIndex)
+          break;
+        case false:
+          let index = selectArray.indexOf(rowIndex);
+          selectArray.splice(index, 1)
+          break;
+
+      }
+      setselectArray([...selectArray])
+      // console.log('isSelect ', isSelect)
+      // console.log('row ', row)
+      // return
+    },
+
     onSelectAll: (isSelect, rows, e) => {
       if (isSelect) {
-        return dataForm.map((row, i) => i);
+        console.log('rows ', rows)
+        let rowSelect = new Array
+        rows.map((row, i) => {
+          selectArray.push(i)
+          rowSelect.push(row.id)
+        })
+        setselectArray([...selectArray])
+        console.log('rowSelect ',rowSelect)
+        return rowSelect;
       } else {
+        setselectArray(new Array)
         return []
       }
     }
@@ -76,25 +127,35 @@ function App() {
 
   }
 
-  const editFormatter = (cell, rowIndex, name) => {
+  const editFormatter = (cell, row, rowIndex) => {
     return (
-      <div>
-        EDIT/DELETE
-      </div>
+      <Row className='fn-table'>
+        <Col>
+          EDIT
+        </Col>
+        /
+        <Col>
+          <span onClick={() => deleteRows(rowIndex)}>
+            DELETE
+        </span>
+
+        </Col>
+      </Row>
+
     );
   };
 
-  const checkFormatter = () => {
-    return (
-      <Form.Group controlId="formBasicCheckbox">
-        <Form.Check type="checkbox" />
-      </Form.Group>
-    )
-  }
+  // const checkFormatter = (cell, row, rowIndex) => {
+  //   return (
+  //     <Form.Group>
+  //       <Form.Check type="checkbox" onChange={() => onChangeCheckbox(row, rowIndex)} />
+  //     </Form.Group>
+  //   )
+  // }
 
-  const nameFormatter = (cell, rowIndex, name) => {
+  const nameFormatter = (cell, row, rowIndex) => {
     return (
-      <div>{`${rowIndex.firstname} ${rowIndex.lastname}`}</div>
+      <div>{`${row.firstname} ${row.lastname}`}</div>
     )
   }
 
@@ -127,8 +188,6 @@ function App() {
       // headerClasses: 'header-custom __checkAcc __icon',
     }
   ];
-
-  console.log('objForm ', objForm)
 
   return (
     <div className='form'>
@@ -279,26 +338,25 @@ function App() {
       </Form>
 
       <div className='uper-table'>
-        {/* <Form.Row>
+        <Form.Row>
           <Col className='col-8'>
             <Form.Group as={Row} >
-              <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" onChange={onSelectAll} />
+              {/* <Form.Group controlId="formBasicCheckbox">
+                <Form.Check type="checkbox" onChange={() => setcheckAll(!checkAll)} />
               </Form.Group>
               <Col >
                 <Form.Label column >
                   Select All
                 </Form.Label>
-              </Col>
+              </Col> */}
               <Col>
-                <Button >Delete</Button>
+                <Button onClick={onDeleteSelect}>Delete Select</Button>
               </Col>
             </Form.Group>
           </Col>
-        </Form.Row> */}
+        </Form.Row>
       </div>
-      <BootstrapTable keyField='id' data={dataForm} columns={columns} pagination={pagination} selectRow={selectRow } />
-
+      <BootstrapTable keyField='id' data={dataForm} columns={columns} pagination={pagination} selectRow={selectRow} />
 
     </div >
   );

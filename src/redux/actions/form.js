@@ -8,8 +8,9 @@ export const setStateToAdd = (payload) => ({
     payload: payload
 })
 
-export const setStateToDelete = () => ({
-    type: DELETE_FORM
+export const setStateToDelete = (payload) => ({
+    type: DELETE_FORM,
+    payload: payload
 })
 
 export const setStateToEdit = (payload) => ({
@@ -28,9 +29,9 @@ export const onAdd = (payload) => {
 }
 
 
-export const onDelete = () => {
+export const onDelete = (payload) => {
     return dispatch => {
-        dispatch(setStateToDelete())
+        dispatch(setStateToDelete(payload))
     }
 }
 

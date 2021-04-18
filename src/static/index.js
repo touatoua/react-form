@@ -1,6 +1,7 @@
 export const titleData = [
     'Mr.',
-    'Mrs.'
+    'Mrs.',
+    'Miss'
 ]
 
 export const genderData = [
