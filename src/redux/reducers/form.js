@@ -1,10 +1,10 @@
-import { ADD_FORM,DELETE_FORM } from '../actions/form'
+import { ADD_FORM, EDIT_FORM } from '../actions/form'
 
 const initialState = {
     form: localStorage.getItem('form') ? JSON.parse(localStorage.getItem('form')) : []
 }
 
-export default (state = initialState, { type, payload }) => {
+const formReducer = (state = initialState, { type, payload }) => {
     switch (type) {
 
         case ADD_FORM:
@@ -13,12 +13,15 @@ export default (state = initialState, { type, payload }) => {
             localStorage.setItem('form', JSON.stringify(state.form))
             return { ...state }
 
-            case DELETE_FORM:
+        case EDIT_FORM:
             localStorage.setItem('form', JSON.stringify(payload))
 
-            return {...state}
+            return { ...state }
 
         default:
             return state
     }
 }
+
+
+export default formReducer;

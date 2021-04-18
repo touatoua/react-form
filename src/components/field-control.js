@@ -5,7 +5,7 @@ import PhoneInput from 'react-phone-input-2'
 import NumberFormat from "react-number-format";
 
 export default function fieldcontrol(props) {
-    const { type, placeholder, typeInput, name, defaultValue, option, onChange, label, value, format, decimalScale, suffix, require } = props
+    const { type, placeholder, typeInput, name, option, onChange, label, value, format, decimalScale, suffix, require } = props
     switch (type) {
         case 'text':
             return (
@@ -28,12 +28,12 @@ export default function fieldcontrol(props) {
             )
         case 'select':
             return (
-                <Form.Group as={Row} c>
+                <Form.Group as={Row} >
                     <Form.Label column >
                         {label}
                     </Form.Label>
                     <Col >
-                        <Form.Control as="select" defaultValue={defaultValue} onChange={onChange} name={name} required={require}>
+                        <Form.Control as="select" onChange={onChange} name={name} required={require} value={value}>
                             {option.map((e, i) =>
                                 name === 'nationality' ? <option value={e.label} key={i}>{e.label}</option>
                                     : <option value={e} key={i}>{e}</option>
@@ -50,7 +50,7 @@ export default function fieldcontrol(props) {
                         {label}
                     </Form.Label>
                     <Col >
-                        <Form.Control type="date" name={name} onChange={onChange} required={require} />
+                        <Form.Control type="date" name={name} onChange={onChange} required={require} value={value} />
                     </Col>
                 </Form.Group>
             )
@@ -87,6 +87,7 @@ export default function fieldcontrol(props) {
                     </Form.Label>
                     <Col >
                         <PhoneInput
+                            country='th'
                             placeholder="Enter phone number"
                             value={value}
                             onChange={onChange}

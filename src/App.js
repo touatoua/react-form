@@ -19,13 +19,12 @@ function App() {
   const [dataForm, setdataForm] = useState(formReducer.form)
   const [objForm, setobjForm] = useState({ gender: 'Male', nationality: 'Thailand' })
   // const [checkAll, setcheckAll] = useState(false)
-  const [selectArray, setselectArray] = useState(new Array)
+  const [selectArray, setselectArray] = useState([])
   const [currentPage, setcurrentPage] = useState(0)
+  const [editing, setediting] = useState(false)
+  const [selectEditRow, setselectEditRow] = useState(0)
 
   const onChangeInput = ({ target: { name, value } }) => {
-    console.log('name ', name)
-    console.log('value', value)
-
     setobjForm({ ...objForm, [name]: value })
 
   }
@@ -43,27 +42,34 @@ function App() {
 
   }
 
-  // const onChangeCheckbox = (row, rowIndex) => {
-  //   // console.log('row', row)
-  //   // dataForm[rowIndex] = { ...dataForm[rowIndex], check: !row.check }
-  //   // console.log('dataForm[rowIndex] ', dataForm[rowIndex])
-  //   // setdataForm([...dataForm])
-
-  // }
-
   const deleteRows = (rowIndex) => {
     dataForm.splice(((currentPage - 1) * 5) + rowIndex, 1)
-    dispatch(formAction.onDelete(dataForm))
+    dispatch(formAction.onEdit(dataForm))
   }
+
+  const editRows = (rowIndex) => {
+    setselectEditRow(rowIndex)
+    setobjForm(dataForm[rowIndex])
+    setediting(true)
+  }
+
+  const onSaveEdit = () => {
+    dataForm[selectEditRow] = objForm
+    setdataForm([...dataForm])
+    dispatch(formAction.onEdit(dataForm))
+    setediting(false)
+
+  }
+
 
   const onDeleteSelect = () => {
     let filtered = dataForm.filter(function (value, index, arr) {
       return selectArray.indexOf(index) === -1
     });
     setdataForm(filtered)
-    dispatch(formAction.onDelete(filtered))
+    dispatch(formAction.onEdit(filtered))
 
-    setselectArray(new Array)
+    setselectArray([])
 
   }
 
@@ -87,27 +93,25 @@ function App() {
           let index = selectArray.indexOf(rowIndex);
           selectArray.splice(index, 1)
           break;
+        default:
+          break;
+
 
       }
       setselectArray([...selectArray])
-      // console.log('isSelect ', isSelect)
-      // console.log('row ', row)
-      // return
     },
 
     onSelectAll: (isSelect, rows, e) => {
       if (isSelect) {
-        console.log('rows ', rows)
-        let rowSelect = new Array
-        rows.map((row, i) => {
+        let rowSelect = []
+        rows.forEach((row, i) => {
           selectArray.push(i)
           rowSelect.push(row.id)
         })
         setselectArray([...selectArray])
-        console.log('rowSelect ',rowSelect)
         return rowSelect;
       } else {
-        setselectArray(new Array)
+        setselectArray([])
         return []
       }
     }
@@ -131,7 +135,9 @@ function App() {
     return (
       <Row className='fn-table'>
         <Col>
-          EDIT
+          <span onClick={() => editRows(rowIndex)}>
+            EDIT
+        </span>
         </Col>
         /
         <Col>
@@ -145,14 +151,6 @@ function App() {
     );
   };
 
-  // const checkFormatter = (cell, row, rowIndex) => {
-  //   return (
-  //     <Form.Group>
-  //       <Form.Check type="checkbox" onChange={() => onChangeCheckbox(row, rowIndex)} />
-  //     </Form.Group>
-  //   )
-  // }
-
   const nameFormatter = (cell, row, rowIndex) => {
     return (
       <div>{`${row.firstname} ${row.lastname}`}</div>
@@ -161,11 +159,6 @@ function App() {
 
 
   const columns = [
-    // {
-    //   text: '',
-    //   formatter: checkFormatter,
-    //   // headerClasses: 'header-custom __checkAcc __icon',
-    // },
     {
       formatter: nameFormatter,
       text: 'NAME'
@@ -183,9 +176,7 @@ function App() {
       text: 'NATIONALITY'
     },
     {
-      text: '',
       formatter: editFormatter,
-      // headerClasses: 'header-custom __checkAcc __icon',
     }
   ];
 
@@ -220,6 +211,7 @@ function App() {
           </Col>
           <Col className='col-5'>
             <Fieldcontrol
+              value={objForm.lastname}
               label='Last Name'
               type='text'
               placeholder='Last Name'
@@ -235,6 +227,7 @@ function App() {
         <Form.Row>
           <Col className='col-4'>
             <Fieldcontrol
+              value={objForm.birthday}
               onChange={onChangeInput}
               label='Birth Day'
               type='date'
@@ -245,7 +238,7 @@ function App() {
           </Col>
           <Col className='col-8'>
             <Fieldcontrol
-              defaultValue={'Thailand'}
+              // defaultValue={'Thailand'}
               value={objForm.nationality}
               label='Nationality'
               type='select'
@@ -262,13 +255,13 @@ function App() {
         <Form.Row>
           <Col className='col-8'>
             <Fieldcontrol
+              value={objForm.citizen_id}
               format='#-####-#####-##-#'
               label='CitizenID'
               type='citizen'
               placeholder='CitizenID'
               name='citizen_id'
               onChange={onChangeIdCard}
-              value={objForm.citizen_id}
               require={true}
 
             />
@@ -306,6 +299,7 @@ function App() {
         <Form.Row>
           <Col className='col-8'>
             <Fieldcontrol
+              value={objForm.passport}
               label='Passport No'
               type='text'
               placeholder='Passport No'
@@ -331,8 +325,19 @@ function App() {
             />
 
           </Col>
-          <Col>
-            <Button type='submit'>Submit</Button>
+          <Col className='btn'>
+            <Button hidden={editing} type='submit'>Submit</Button>
+            <Button hidden={!editing} onClick={onSaveEdit}>save</Button>
+            <Button
+              hidden={!editing}
+              onClick={() => {
+                // Object.keys(objForm).forEach(k => objForm[k] = null);
+                // setobjForm({ ...objForm, gender: 'Male', nationality: 'Thailand' })
+                setediting(false)
+              }}>
+              cancel
+            </Button>
+
           </Col>
         </Form.Row>
       </Form>
