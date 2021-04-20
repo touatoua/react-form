@@ -133,19 +133,16 @@ function App() {
 
   const editFormatter = (cell, row, rowIndex) => {
     return (
-      <Row className='fn-table'>
-        <Col>
-          <span onClick={() => editRows(rowIndex)}>
-            EDIT
-        </span>
-        </Col>
-        /
-        <Col>
-          <span onClick={() => deleteRows(rowIndex)}>
-            DELETE
-        </span>
+      <Row className='fn-table align-items-center'>
+        <Button variant={'link'} onClick={() => editRows(rowIndex)}>
+          EDIT
+        </Button>
+          /
+        <Button variant={'link'} onClick={() => deleteRows(rowIndex)}>
+          <span className='-require'>DELETE</span>
+        </Button>
 
-        </Col>
+
       </Row>
 
     );
@@ -184,63 +181,67 @@ function App() {
     <div className='form'>
       <Form noValidate validated={validated} onSubmit={submit}>
         <Form.Row>
-          <Col className='col-2'>
+          <Col lg={3} md={4}>
             <Fieldcontrol
               value={objForm.title}
-              label='Title'
+              label='Title :'
               type='select'
               typeInput='text'
               name='title'
               option={titleData}
               onChange={onChangeInput}
               require={true}
+              star={true}
             />
           </Col>
-          <Col className='col-5'>
+          <Col lg={4} md={8}>
             <Fieldcontrol
               value={objForm.firstname}
-              label='First Name'
+              label='First Name :'
               type='text'
               placeholder='First Name'
               typeInput='text'
               name='firstname'
               onChange={onChangeInput}
               require={true}
+              star={true}
 
             />
           </Col>
-          <Col className='col-5'>
+          <Col lg={5} md={6}>
             <Fieldcontrol
               value={objForm.lastname}
-              label='Last Name'
+              label='Last Name :'
               type='text'
               placeholder='Last Name'
               typeInput='text'
               name='lastname'
               onChange={onChangeInput}
               require={true}
+              star={true}
 
             />
           </Col>
         </Form.Row>
 
         <Form.Row>
-          <Col className='col-4'>
+          <Col lg={4} md={6}>
             <Fieldcontrol
               value={objForm.birthday}
               onChange={onChangeInput}
-              label='Birth Day'
+              label='Birth Day :'
               type='date'
               name='birthday'
               require={true}
+              star={true}
 
             />
           </Col>
-          <Col className='col-8'>
+          <Col lg={8} md={6}>
             <Fieldcontrol
               // defaultValue={'Thailand'}
               value={objForm.nationality}
-              label='Nationality'
+              label='Nationality :'
               type='select'
               typeInput='text'
               name='nationality'
@@ -253,11 +254,11 @@ function App() {
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col className='col-8'>
+          <Col lg={4}>
             <Fieldcontrol
               value={objForm.citizen_id}
               format='#-####-#####-##-#'
-              label='CitizenID'
+              label='CitizenID :'
               type='citizen'
               placeholder='CitizenID'
               name='citizen_id'
@@ -268,9 +269,9 @@ function App() {
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col className='col-8'>
+          <Col lg={4} >
             <Fieldcontrol
-              label='Gender'
+              label='Gender :'
               type='radio'
               option={genderData}
               name='gender'
@@ -283,24 +284,25 @@ function App() {
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col className='col-8'>
+          <Col lg={6} >
             <Fieldcontrol
-              label='Phone'
+              label='Mobile Phone :'
               type='phone'
               name='phone'
               onChange={onChangePhone}
               require={true}
               value={objForm.phone}
+              star={true}
 
             />
 
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col className='col-8'>
+          <Col lg={6}>
             <Fieldcontrol
               value={objForm.passport}
-              label='Passport No'
+              label='Passport No :'
               type='text'
               placeholder='Passport No'
               typeInput='number'
@@ -312,9 +314,9 @@ function App() {
           </Col>
         </Form.Row>
         <Form.Row>
-          <Col className='col-8'>
+          <Col lg={6}>
             <Fieldcontrol
-              label='Expected Salary'
+              label='Expected Salary :'
               type='number'
               decimalScale={2}
               placeholder='Expected Salary'
@@ -322,23 +324,32 @@ function App() {
               onChange={(e) => onChangeNumber(e, 'salary')}
               value={objForm.salary}
               require={true}
+              star={true}
+
             />
 
           </Col>
-          <Col className='btn'>
-            <Button hidden={editing} type='submit'>Submit</Button>
-            <Button hidden={!editing} onClick={onSaveEdit}>save</Button>
-            <Button
-              hidden={!editing}
-              onClick={() => {
-                // Object.keys(objForm).forEach(k => objForm[k] = null);
-                // setobjForm({ ...objForm, gender: 'Male', nationality: 'Thailand' })
-                setediting(false)
-              }}>
-              cancel
-            </Button>
 
-          </Col>
+          {editing ?
+            <Col className='btn'>
+              <Button className='mr-2' variant={'success'} hidden={!editing} onClick={onSaveEdit}>save</Button>
+              <Button
+                variant={'danger'}
+                hidden={!editing}
+                onClick={() => {
+                  // Object.keys(objForm).forEach(k => objForm[k] = null);
+                  // setobjForm({ ...objForm, gender: 'Male', nationality: 'Thailand' })
+                  setediting(false)
+                }}>
+                cancel
+            </Button>
+            </Col>
+            :
+            <Col className='btn'>
+              <Button hidden={editing} type='submit'>Submit</Button>
+            </Col>
+          }
+
         </Form.Row>
       </Form>
 
@@ -355,7 +366,7 @@ function App() {
                 </Form.Label>
               </Col> */}
               <Col>
-                <Button onClick={onDeleteSelect}>Delete Select</Button>
+                <Button onClick={onDeleteSelect} variant={'danger'}>Delete Select</Button>
               </Col>
             </Form.Group>
           </Col>

@@ -5,13 +5,13 @@ import PhoneInput from 'react-phone-input-2'
 import NumberFormat from "react-number-format";
 
 export default function fieldcontrol(props) {
-    const { type, placeholder, typeInput, name, option, onChange, label, value, format, decimalScale, suffix, require } = props
+    const { type, placeholder, typeInput, name, option, onChange, label, value, format, decimalScale, suffix, require, star } = props
     switch (type) {
         case 'text':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label} {star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <Form.Control
@@ -29,8 +29,8 @@ export default function fieldcontrol(props) {
         case 'select':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3} >
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <Form.Control as="select" onChange={onChange} name={name} required={require} value={value}>
@@ -46,8 +46,8 @@ export default function fieldcontrol(props) {
         case 'date':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <Form.Control type="date" name={name} onChange={onChange} required={require} value={value} />
@@ -57,8 +57,8 @@ export default function fieldcontrol(props) {
         case 'radio':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         {option.map((e, i) =>
@@ -82,8 +82,8 @@ export default function fieldcontrol(props) {
         case 'phone':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <PhoneInput
@@ -104,8 +104,8 @@ export default function fieldcontrol(props) {
         case 'citizen':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <NumberFormat
@@ -124,8 +124,8 @@ export default function fieldcontrol(props) {
         case 'number':
             return (
                 <Form.Group as={Row} >
-                    <Form.Label column >
-                        {label}
+                    <Form.Label column md={3}>
+                        {label}{star && <span className='-require' >*</span>}
                     </Form.Label>
                     <Col >
                         <NumberFormat

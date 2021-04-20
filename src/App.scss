@@ -1,5 +1,11 @@
 @import "~bootstrap/scss/bootstrap";
 
+span{
+  &.-require{
+    color: red;
+  }
+}
+
 .form {
   padding:1em;
       //  display: flex;
@@ -24,6 +30,44 @@
 
 .btn{
   justify-content: space-evenly;
+  &.btn{
+    font-weight: 600;
+    &-primary{
+      color: black;
+      background-color: white;
+      border-color: black;
+      &:hover{
+        color: white;
+        background-color: black;
+        border-color: black;
+      }
+    }
+    &-danger{
+      color: red;
+      background-color: white;
+      border-color: red;
+      &:hover{
+        color: white;
+        background-color: red;
+        border-color: red;
+      }
+    }
+    &-success{
+      color: green;
+      background-color: white;
+      border-color: green;
+      &:hover{
+        color: white;
+        background-color: green;
+        border-color: green;
+      }
+    }
+  }
 
 }
 
+.react-tel-input{
+  .form-control{
+    width: 100%  !important;
+  }
+}
